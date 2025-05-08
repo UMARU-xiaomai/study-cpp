@@ -65,6 +65,9 @@ public:
         // Create two unique_locks but don't lock them yet
         std::unique_lock<std::mutex> lock1(from.mtx, std::defer_lock);
         std::unique_lock<std::mutex> lock2(to.mtx, std::defer_lock);
+        //std::defer_lock: 创建但不锁定
+        //std::try_to_lock: 尝试锁定
+        //std::adopt_lock: 假设已经锁定
 
         // 使用 std::lock 同时锁定两个互斥量，避免死锁
         // Use std::lock to lock both mutexes simultaneously, avoiding deadlock
