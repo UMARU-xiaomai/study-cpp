@@ -42,10 +42,15 @@ void unique_ptr_example() {
     // 使用 -> 操作符访问成员
     // ##关键##
     ptr1->use();
+    (*ptr1).use();
     
     // 移动语义：由于 unique_ptr 独占所有权，所以不能直接赋值，需要使用 std::move 进行移动
     // ##关键##
     std::unique_ptr<Resource> ptr2 = std::move(ptr1);
+    // 通过move的含义理解：
+    // move是将左值转换为右值，从而进行移动而不是拷贝
+    // 移动后，原对象的指针将被设置为nullptr
+    // 而内容物移到ptr2中
     
     // 此时 ptr1 为 nullptr
     if (!ptr1) {
@@ -74,7 +79,7 @@ void shared_ptr_example() {
     std::cout << "\n=== shared_ptr Example ===" << std::endl;
     
     // 创建 shared_ptr
-    std::shared_ptr<Resource> ptr1 = std::make_shared<Resource>("Shared1");
+    std::shared_ptr<Resource> ptr1(new Resource("Shared1"));
     // 或使用 make_shared (C++14)
     auto ptr3 = std::make_shared<Resource>("Shared2");
     
@@ -116,11 +121,20 @@ void weak_ptr_example() {
     
     // 检查资源是否还存在
     // ##关键##
+    // 如果资源存在，则lock() 返回一个 shared_ptr 指向该资源
+    // 如果资源不存在，则lock() 返回一个空的 shared_ptr
     if (auto resource = weak.lock()) {
         std::cout << "Resource is still alive" << std::endl;
         resource->use();
+        // 重置weak_ptr，避免循环引用
+        // 注意不是unlock()
+        resource.reset();
     }
-    
+    // 当通过 weak_ptr::lock() 获得的临时 shared_ptr 离开作用域时，引用计数会减1。这是因为：
+    // lock() 返回的是一个新的 shared_ptr 对象
+    // 这个 shared_ptr 对象遵循正常的 RAII 原则
+    // 当它离开作用域时，会自动调用析构函数，从而减少引用计数
+
     // 重置 shared_ptr
     shared.reset();
     
