@@ -80,8 +80,8 @@ public:
         from.balance -= amount;
         to.balance += amount;
         // 演示手动解锁（实际不需要） / Demonstrate manual unlocking (not actually needed)
-        std::unique_lock<std::mutex> lock1(from.mtx, std::defer_lock);
-        std::unique_lock<std::mutex> lock2(to.mtx, std::defer_lock);
+        lock1.unlock();
+        lock2.unlock();
 
         std::cout << "Transfer completed: " << amount << std::endl;
     }
