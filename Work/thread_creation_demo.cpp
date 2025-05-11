@@ -7,6 +7,7 @@ void thread_function(int id) {
     std::cout << "线程 " << id << " 开始执行。" << std::endl;
     // 模拟一些工作
     std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::yield();//让出cpu时间片，不要与协程弄混了
     std::cout << "线程 " << id << " 执行完毕。" << std::endl;
 }
 
