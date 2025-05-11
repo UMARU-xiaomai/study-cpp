@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+using namespace std;
 
 // 示例类
 class Resource {
@@ -170,5 +171,9 @@ int main() {
     weak_ptr_example();
     auto_ptr_example();
     
+    auto a = std::make_unique<int>(new int(10));
+    cout << *a << endl;
+    a.reset();
+
     return 0;
 }
