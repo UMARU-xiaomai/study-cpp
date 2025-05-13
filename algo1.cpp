@@ -29,6 +29,8 @@ class Solution {
                 {
                     res.push_back(s[i]);
                     cout<<s[i]<<endl;
+
+                
                 }
             }
      
